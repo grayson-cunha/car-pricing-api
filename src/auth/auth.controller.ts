@@ -1,21 +1,32 @@
-import { Body, Controller, Get, Post, Session } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Session,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+
 import { SerializeResponseTo } from '../interceptors/serialize.interceptor';
 import { CreateUserDto } from '../users/dtos/create-user.dto';
 import { UserDto } from '../users/dtos/user.dto';
 import { AuthService } from './auth.service';
+import { CurrentUser } from '../users/decorators/current-user.decorator';
+import { User } from 'src/users/user.entity';
+import { CurrentUserInterceptor } from 'src/users/interceptors/current-user.interceptor';
+import { AuthGuard } from 'src/guards/auth.guards';
 
 @Controller('auth')
 @SerializeResponseTo(UserDto)
+@UseInterceptors(CurrentUserInterceptor)
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private userService: UsersService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Get('/whoami')
-  whoAmI(@Session() session: any) {
-    return this.userService.findOne(session.userId);
+  @UseGuards(AuthGuard)
+  whoAmI(@CurrentUser() user: User) {
+    return user;
   }
 
   @Post('/signup')
@@ -34,5 +45,10 @@ export class AuthController {
     session.userId = user.id;
 
     return user;
+  }
+
+  @Post('/signout')
+  async signout(@Session() session: any) {
+    session.userId = null;
   }
 }
