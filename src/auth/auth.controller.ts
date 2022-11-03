@@ -13,9 +13,9 @@ import { CreateUserDto } from '../users/dtos/create-user.dto';
 import { UserDto } from '../users/dtos/user.dto';
 import { AuthService } from './auth.service';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
-import { User } from 'src/users/user.entity';
-import { CurrentUserInterceptor } from 'src/users/interceptors/current-user.interceptor';
-import { AuthGuard } from 'src/guards/auth.guards';
+import { User } from '../users/user.entity';
+import { CurrentUserInterceptor } from '../users/interceptors/current-user.interceptor';
+import { AuthGuard } from '../guards/auth.guards';
 
 @Controller('auth')
 @SerializeResponseTo(UserDto)
