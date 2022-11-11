@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Post,
   Session,
   UseGuards,
@@ -15,7 +17,7 @@ import { AuthService } from './auth.service';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
 import { User } from '../users/user.entity';
 import { CurrentUserInterceptor } from '../users/interceptors/current-user.interceptor';
-import { AuthGuard } from '../guards/auth.guards';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('auth')
 @SerializeResponseTo(UserDto)
@@ -48,6 +50,7 @@ export class AuthController {
   }
 
   @Post('/signout')
+  @HttpCode(HttpStatus.OK)
   async signout(@Session() session: any) {
     session.userId = null;
   }
