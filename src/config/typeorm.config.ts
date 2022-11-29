@@ -14,7 +14,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         type: 'postgres',
         url: this.configService.get<string>('DATABASE_URL'),
         migrationsRun: true,
-        entities: ['**/*.entity.js'],
+        autoLoadEntities: true,
         ssl: {
           rejectUnauthorized: false,
         },
